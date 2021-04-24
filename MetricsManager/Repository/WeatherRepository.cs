@@ -43,7 +43,7 @@ namespace MetricsManager.Repository
             return _weather.Where(
                 el => (dateFrom == null || el.Date >= dateFrom) 
                       && (dateTo == null || el.Date <= dateTo)
-            ).ToList();
+            ).OrderBy(el => el.Date).ToList();
         }
         
         public bool Delete(DateTime dateFrom, DateTime dateTo)
