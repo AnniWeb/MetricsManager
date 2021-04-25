@@ -26,7 +26,7 @@ namespace MetricsManager.Controllers
         /// <param name="date">Дата и время наблюдения</param>
         /// <param name="temperature">Температура</param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPost]
         public IActionResult Create([FromQuery] DateTime date, [FromQuery] int temperature)
         {
             var data = new WeatherRepository();
@@ -43,7 +43,7 @@ namespace MetricsManager.Controllers
         /// <param name="date">Дата и время наблюдения</param>
         /// <param name="temperature">Температура</param>
         /// <returns></return
-        [HttpPost]
+        [HttpPut]
         public IActionResult Update([FromQuery] DateTime date, [FromQuery] int temperature)
         {
             var data = new WeatherRepository();
