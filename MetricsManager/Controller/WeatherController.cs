@@ -7,17 +7,19 @@ using System.Threading.Tasks;
 using MetricsManager.Entity;
 using MetricsManager.Repository;
 
-namespace MetricsManager.Controllers
+namespace MetricsManager.Controller
 {
     [ApiController]
     [Route("api/weather")]
     public class WeatherController : ControllerBase
     {
         private readonly ILogger<WeatherController> _logger;
+        private readonly WeatherRepository _repository;
 
-        public WeatherController(ILogger<WeatherController> logger)
+        public WeatherController(WeatherRepository repository, ILogger<WeatherController> logger)
         {
             _logger = logger;
+            _repository = repository;
         }
 
         /// <summary>
@@ -29,8 +31,7 @@ namespace MetricsManager.Controllers
         [HttpPost]
         public IActionResult Create([FromQuery] DateTime date, [FromQuery] int temperature)
         {
-            var data = new WeatherRepository();
-            if (data.Add(new WeatherEntity {Temperature = temperature, Date = date}))
+            if (_repository.TryAdd(new WeatherEntity {Temperature = temperature, Date = date}))
             {
                 return Ok("Данные успешно сохранены");
             }
@@ -46,8 +47,7 @@ namespace MetricsManager.Controllers
         [HttpPut]
         public IActionResult Update([FromQuery] DateTime date, [FromQuery] int temperature)
         {
-            var data = new WeatherRepository();
-            if (data.Update(new WeatherEntity {Temperature = temperature, Date = date}))
+            if (_repository.TryUpdate(new WeatherEntity {Temperature = temperature, Date = date}))
             {
                 return Ok("Данные успешно обновлены");
             }
@@ -73,10 +73,8 @@ namespace MetricsManager.Controllers
             {
                 return BadRequest("Некорректный диапазон");
             }
-
             
-            var data = new WeatherRepository();
-            if (data.Delete((DateTime) dateFrom, (DateTime) dateTo))
+            if (_repository.Delete((DateTime) dateFrom, (DateTime) dateTo))
             {
                 return Ok("Данные успешно удалены");
             }
@@ -92,8 +90,7 @@ namespace MetricsManager.Controllers
         [HttpGet]
         public IEnumerable<WeatherEntity> Get([FromQuery] DateTime? dateFrom, [FromQuery] DateTime? dateTo)
         {
-            var data = new WeatherRepository();
-            return data.GetWeatherByPeriod(dateFrom, dateTo);
+            return _repository.GetWeatherByPeriod(dateFrom, dateTo);
         }
 
     }

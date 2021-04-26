@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MetricsManager.Repository;
 
 namespace MetricsManager
 {
@@ -32,6 +33,8 @@ namespace MetricsManager
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MetricsManager", Version = "v1" });
             });
+
+            services.AddSingleton<WeatherRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

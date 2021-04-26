@@ -4,8 +4,8 @@ namespace MetricsManager.Entity
 {
     public class WeatherEntity
     {
-        protected DateTime _date;
-        protected int _temperature;
+        private DateTime _date;
+        private int _temperature;
 
         public DateTime Date
         {

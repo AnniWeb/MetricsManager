@@ -9,33 +9,12 @@ namespace MetricsManager.Repository
 {
     public class WeatherRepository
     {
-        protected readonly string _file = "weather_date.json";
-        protected List<WeatherEntity> _weather = new List<WeatherEntity>();
+        private readonly string _file = "weather_date.json";
+        private List<WeatherEntity> _weather = new List<WeatherEntity>();
 
         public WeatherRepository()
         {
             ReadData();
-        }
-
-        protected void ReadData()
-        {
-            if (!File.Exists(_file))
-            {
-                UpdateData();
-            }
-            var data = File.ReadAllText(_file);
-            _weather = JsonSerializer.Deserialize<List<WeatherEntity>>(data);
-        }
-
-        protected void UpdateData()
-        {
-            var data = JsonSerializer.Serialize(_weather);
-            File.WriteAllText(_file, data);
-        }
-
-        protected WeatherEntity? Find(WeatherEntity findWeather)
-        {
-            return _weather.Find(el => findWeather.Date == el.Date);
         }
 
         public List<WeatherEntity> GetWeatherByPeriod(DateTime? dateFrom, DateTime? dateTo)
@@ -53,7 +32,7 @@ namespace MetricsManager.Repository
             return true;
         }
 
-        public bool Add(WeatherEntity weather)
+        public bool TryAdd(WeatherEntity weather)
         {
             if (!weather.IsValid() || Find(weather) != null)
             {
@@ -64,7 +43,7 @@ namespace MetricsManager.Repository
             return true;
         }
         
-        public bool Update(WeatherEntity weather)
+        public bool TryUpdate(WeatherEntity weather)
         {
             var weatherOld = Find(weather);
             if (weather.IsValid() && weatherOld != null)
@@ -75,6 +54,27 @@ namespace MetricsManager.Repository
                 return true;
             }
             return false;
+        }
+
+        private void ReadData()
+        {
+            if (!File.Exists(_file))
+            {
+                UpdateData();
+            }
+            var data = File.ReadAllText(_file);
+            _weather = JsonSerializer.Deserialize<List<WeatherEntity>>(data);
+        }
+
+        private void UpdateData()
+        {
+            var data = JsonSerializer.Serialize(_weather);
+            File.WriteAllText(_file, data);
+        }
+
+        private WeatherEntity? Find(WeatherEntity findWeather)
+        {
+            return _weather.Find(el => findWeather.Date == el.Date);
         }
     }
 }
