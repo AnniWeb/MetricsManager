@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using MetricsManager.Entity;
+using WeatherManager.Entity;
 
-namespace MetricsManager.Repository
+namespace WeatherManager.Repository
 {
     public class WeatherRepository
     {
