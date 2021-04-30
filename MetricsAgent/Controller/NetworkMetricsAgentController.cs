@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MetricsAgent.Entity;
 using MetricsAgent.Model;
 using MetricsAgent.Repository;
+using MetricsAgent.Request;
 using MetricsAgent.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -57,7 +58,7 @@ namespace MetricsAgent.Controller
         }
         
         [HttpPost]
-        public IActionResult Create([FromBody] NetworkMetricResponse metricRequest)
+        public IActionResult Create([FromBody] NetworkMetricRequest metricRequest)
         {
             _repository.Create(new NetworkMetricsModel()
             {

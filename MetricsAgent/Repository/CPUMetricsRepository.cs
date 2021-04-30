@@ -45,7 +45,7 @@ namespace MetricsAgent.Repository
 
             // в таблице будем хранить время в секундах, потому преобразуем перед записью в секунды
             // через свойство
-            cmd.Parameters.AddWithValue("@time", item.Time.ToUnixTimeMilliseconds());
+            cmd.Parameters.AddWithValue("@time", item.Time.ToUnixTimeSeconds());
             // подготовка команды к выполнению
             cmd.Prepare();
 
@@ -70,7 +70,8 @@ namespace MetricsAgent.Repository
 
             cmd.Connection.Open();
             // прописываем в команду SQL запрос на получение всех данных из таблицы
-            cmd.CommandText = $"SELECT id, value, time FROM {Table} WHERE time BETWEEN @fromTime AND @toTime;";
+            // cmd.CommandText = $"SELECT id, value, time FROM {Table} WHERE time BETWEEN @fromTime AND @toTime;";
+            cmd.CommandText = $"SELECT id, value, time FROM {Table};";
             cmd.Parameters.AddWithValue("@fromTime", fromTime.ToUnixTimeSeconds());
             cmd.Parameters.AddWithValue("@toTime", toTime.ToUnixTimeSeconds());
             cmd.Prepare();
@@ -103,7 +104,6 @@ namespace MetricsAgent.Repository
 
         public void CreateTable()
         {
-            bool createTable = false;
             using var conn = new SQLiteConnection(ConnectionString);
             using var command = new SQLiteCommand(conn);
             
@@ -114,7 +114,6 @@ namespace MetricsAgent.Repository
         
         public void DropTable()
         {
-            bool createTable = false;
             using var conn = new SQLiteConnection(ConnectionString);
             using var command = new SQLiteCommand(conn);
             

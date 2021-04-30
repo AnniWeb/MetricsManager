@@ -45,7 +45,7 @@ namespace MetricsAgent.Repository
 
             // в таблице будем хранить время в секундах, потому преобразуем перед записью в секунды
             // через свойство
-            cmd.Parameters.AddWithValue("@time", item.Time.ToUnixTimeMilliseconds());
+            cmd.Parameters.AddWithValue("@time", item.Time.ToUnixTimeSeconds());
             // подготовка команды к выполнению
             cmd.Prepare();
 
@@ -110,13 +110,14 @@ namespace MetricsAgent.Repository
                 // пока есть что читать -- читаем
                 if (reader.Read())
                 {
+                    var time = reader.GetInt64(2);
                     // добавляем объект в список возврата
                     return new HddSpaceMetricsModel
                     {
                         Id = reader.GetInt32(0),
                         Value = reader.GetInt64(1),
                         // налету преобразуем прочитанные секунды в метку времени
-                        Time = DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64(2))
+                        Time = DateTimeOffset.FromUnixTimeSeconds(time)
                     };
                 }                
                 else
@@ -128,7 +129,6 @@ namespace MetricsAgent.Repository
 
         public void CreateTable()
         {
-            bool createTable = false;
             using var conn = new SQLiteConnection(ConnectionString);
             using var command = new SQLiteCommand(conn);
             
@@ -139,7 +139,6 @@ namespace MetricsAgent.Repository
         
         public void DropTable()
         {
-            bool createTable = false;
             using var conn = new SQLiteConnection(ConnectionString);
             using var command = new SQLiteCommand(conn);
             
