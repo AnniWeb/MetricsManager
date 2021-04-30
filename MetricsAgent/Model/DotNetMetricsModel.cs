@@ -10,6 +10,6 @@ namespace MetricsAgent.Model
         [Required]
         public string Value { get; set; }
         
-        public DateTime DateTime { get; set; }
+        public DateTimeOffset Time { get; set; }
     }
 }
