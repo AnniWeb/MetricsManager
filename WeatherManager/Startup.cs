@@ -11,9 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MetricsManager.Repository;
+using WeatherManager.Repository;
 
-namespace MetricsManager
+namespace WeatherManager
 {
     public class Startup
     {
@@ -31,7 +31,16 @@ namespace MetricsManager
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MetricsManager", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Менеджер метрик погоды", 
+                    Description = "Позволяет отслеживать и анализировать метрики погоды",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Заярная Анастасия"
+                    },
+                    Version = "v1"
+                });
             });
 
             services.AddSingleton<WeatherRepository>();
@@ -43,8 +52,8 @@ namespace MetricsManager
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MetricsManager v1"));
+                app.UseSwagger(c => c.SerializeAsV2 = true);
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WeatherManager v1"));
             }
 
             app.UseHttpsRedirection();

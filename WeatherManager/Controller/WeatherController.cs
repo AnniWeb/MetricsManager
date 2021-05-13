@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MetricsManager.Entity;
-using MetricsManager.Repository;
+using WeatherManager.Entity;
+using WeatherManager.Repository;
 
-namespace MetricsManager.Controller
+namespace WeatherManager.Controller
 {
     [ApiController]
     [Route("api/weather")]
@@ -25,15 +25,26 @@ namespace MetricsManager.Controller
         /// <summary>
         /// Возможность сохранить температуру в указанное время
         /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        /// POST /Todo
+        /// {
+        ///     "date": "2021-01-01",
+        ///     "temperature": -10
+        /// }
+        /// </remarks>
         /// <param name="date">Дата и время наблюдения</param>
         /// <param name="temperature">Температура</param>
         /// <returns></returns>
+        /// <response code="201">Данные сохранены</response>
+        /// <response code="400">Ошибка сохранения</response>
         [HttpPost]
         public IActionResult Create([FromQuery] DateTime date, [FromQuery] int temperature)
         {
-            if (_repository.TryAdd(new WeatherEntity {Temperature = temperature, Date = date}))
+            var weatherRow = new WeatherEntity {Temperature = temperature, Date = date};
+            if (_repository.TryAdd(weatherRow))
             {
-                return Ok("Данные успешно сохранены");
+                return Created("Данные успешно сохранены", weatherRow);
             }
             return BadRequest("Не удалось сохранить");
         }

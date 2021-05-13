@@ -1,10 +1,15 @@
 ﻿using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
-namespace MetricsManager.Entity
+namespace WeatherManager.Entity
 {
     public class WeatherEntity
     {
+        [Required]
         private DateTime _date;
+        
+        [Required]
         private int _temperature;
 
         public DateTime Date
