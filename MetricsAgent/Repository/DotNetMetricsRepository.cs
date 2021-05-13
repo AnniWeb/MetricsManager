@@ -101,7 +101,7 @@ namespace MetricsAgent.Repository
             using var command = new SQLiteCommand(conn);
             
             command.Connection.Open();
-            command.CommandText = @$"CREATE TABLE IF NOT EXISTS {Table} (id INTEGER PRIMARY KEY, value TEXT, time INT);";
+            command.CommandText = @$"CREATE TABLE IF NOT EXISTS {Table} (id INTEGER PRIMARY KEY, value TEXT, time INT64);";
             command.ExecuteNonQuery();
         }
         

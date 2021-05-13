@@ -44,14 +44,17 @@ namespace MetricsAgent.Controller
                 Metrics = new List<NetworkMetricResponse>()
             };
 
-            foreach (var metric in metrics)
+            if (metrics.Count > 0)
             {
-                response.Metrics.Add(new NetworkMetricResponse()
+                foreach (var metric in metrics)
                 {
-                    Id = metric.Id,
-                    Value = metric.Value,
-                    Time = metric.Time
-                });
+                    response.Metrics.Add(new NetworkMetricResponse()
+                    {
+                        Id = metric.Id,
+                        Value = metric.Value,
+                        Time = metric.Time
+                    });
+                }
             }
             
             return Ok(response);

@@ -45,16 +45,19 @@ namespace MetricsAgent.Controller
                 Metrics = new List<CPUMetricResponse>()
             };
 
-            foreach (var metric in metrics)
+            if (metrics.Count > 0)
             {
-                response.Metrics.Add(new CPUMetricResponse()
+                foreach (var metric in metrics)
                 {
-                    Id = metric.Id,
-                    Value = metric.Value,
-                    Time = metric.Time
-                });
+                    response.Metrics.Add(new CPUMetricResponse()
+                    {
+                        Id = metric.Id,
+                        Value = metric.Value,
+                        Time = metric.Time
+                    });
+                }
             }
-            
+
             return Ok(response);
         }
         
@@ -74,16 +77,20 @@ namespace MetricsAgent.Controller
             {
                 Metrics = new List<CPUMetricResponse>()
             };
-
-            foreach (var metric in metrics)
+            
+            if (metrics.Count > 0)
             {
-                response.Metrics.Add(new CPUMetricResponse()
+                foreach (var metric in metrics)
                 {
-                    Id = metric.Id,
-                    Value = metric.Value,
-                    Time = metric.Time
-                });
+                    response.Metrics.Add(new CPUMetricResponse()
+                    {
+                        Id = metric.Id,
+                        Value = metric.Value,
+                        Time = metric.Time
+                    });
+                }
             }
+            
             
             return Ok(response);
         }

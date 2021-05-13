@@ -4,6 +4,7 @@ using MetricsAgent.Entity;
 using MetricsAgent.Model;
 using MetricsAgent.Repository;
 using MetricsAgent.Request;
+using MetricsAgent.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -36,7 +37,7 @@ namespace MetricsAgent.Controller
         {
             var metrics = _repository.GetByPeriod(fromTime, toTime);
             _logger.LogInformation("Запрос количества ошибок за период");
-            return Ok(metrics.Count);
+            return Ok(metrics == null ? 0 : metrics.Count);
         }
         
         [HttpPost]
@@ -58,9 +59,31 @@ namespace MetricsAgent.Controller
         /// <param name="toTime"></param>
         /// <returns></returns>
         [HttpGet("from/{fromTime}/to/{toTime}")]
-        public IEnumerable<DotNetMetricsModel> GetList ([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
+        public IActionResult GetList ([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
         {
-            return new List<DotNetMetricsModel>();
+            _logger.LogInformation("Запрос метрик за период");
+            var metrics = _repository.GetByPeriod(fromTime, toTime);
+            
+            var response = new ListDotNetMetricsResponse()
+            {
+                Metrics = new List<DotNetMetricResponse>()
+            };
+            
+            if (metrics.Count > 0)
+            {
+                foreach (var metric in metrics)
+                {
+                    response.Metrics.Add(new DotNetMetricResponse()
+                    {
+                        Id = metric.Id,
+                        Value = metric.Value,
+                        Time = metric.Time
+                    });
+                }
+            }
+            
+            
+            return Ok(response);
         }
     }
 }

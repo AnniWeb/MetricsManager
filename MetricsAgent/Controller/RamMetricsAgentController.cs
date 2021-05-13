@@ -35,7 +35,7 @@ namespace MetricsAgent.Controller
         {
             _logger.LogInformation("Запрос размера свободной оперативной памяти в мегабайтах");
             var metric = _repository.GetLast();
-            var leftMb = metric.Value / 1024 / 1024;
+            var leftMb = metric == null || metric.Value == 0 ? 0 : metric.Value / 1024 / 1024;
             return Ok(leftMb);
         }
         
@@ -69,16 +69,19 @@ namespace MetricsAgent.Controller
                 Metrics = new List<RamMetricResponse>()
             };
 
-            foreach (var metric in metrics)
+            if (metrics.Count > 0)
             {
-                response.Metrics.Add(new RamMetricResponse()
+                foreach (var metric in metrics)
                 {
-                    Id = metric.Id,
-                    Value = metric.Value,
-                    Time = metric.Time
-                });
+                    response.Metrics.Add(new RamMetricResponse()
+                    {
+                        Id = metric.Id,
+                        Value = metric.Value,
+                        Time = metric.Time
+                    });
+                }
             }
-            
+
             return Ok(response);
         }
     }
