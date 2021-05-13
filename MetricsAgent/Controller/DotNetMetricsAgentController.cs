@@ -50,5 +50,17 @@ namespace MetricsAgent.Controller
             
             return Ok();
         }
+        
+        /// <summary>
+        /// Данные метрики за период
+        /// </summary>
+        /// <param name="fromTime"></param>
+        /// <param name="toTime"></param>
+        /// <returns></returns>
+        [HttpGet("from/{fromTime}/to/{toTime}")]
+        public IEnumerable<DotNetMetricsModel> GetList ([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
+        {
+            return new List<DotNetMetricsModel>();
+        }
     }
 }

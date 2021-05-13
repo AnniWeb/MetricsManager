@@ -61,7 +61,6 @@ namespace MetricsAgent.Controller
         /// <summary>
         /// Данные метрики за период
         /// </summary>
-        /// 
         /// <param name="fromTime"></param>
         /// <param name="toTime"></param>
         /// <returns></returns>

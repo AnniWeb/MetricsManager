@@ -4,6 +4,7 @@ using MetricsAgent.Entity;
 using MetricsAgent.Model;
 using MetricsAgent.Repository;
 using MetricsAgent.Request;
+using MetricsAgent.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -49,6 +50,36 @@ namespace MetricsAgent.Controller
             });
             
             return Ok();
+        }
+        
+        /// <summary>
+        /// Данные метрики за период
+        /// </summary>
+        /// <param name="fromTime"></param>
+        /// <param name="toTime"></param>
+        /// <returns></returns>
+        [HttpGet("from/{fromTime}/to/{toTime}")]
+        public IActionResult GetList ([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
+        {
+            _logger.LogInformation("Запрос метрик за период");
+            var metrics = _repository.GetByPeriod(fromTime, toTime);
+            
+            var response = new ListRamMetricsResponse()
+            {
+                Metrics = new List<RamMetricResponse>()
+            };
+
+            foreach (var metric in metrics)
+            {
+                response.Metrics.Add(new RamMetricResponse()
+                {
+                    Id = metric.Id,
+                    Value = metric.Value,
+                    Time = metric.Time
+                });
+            }
+            
+            return Ok(response);
         }
     }
 }
