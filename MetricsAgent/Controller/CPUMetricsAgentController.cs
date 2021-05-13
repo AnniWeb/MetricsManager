@@ -11,7 +11,6 @@ namespace MetricsAgent.Controller
     [Route("api/metrics/cpu")]
     public class CPUMetricsAgentController : ControllerBase
     {
-        
         /// <summary>
         /// Данные метрики за период с процентилем
         /// </summary>

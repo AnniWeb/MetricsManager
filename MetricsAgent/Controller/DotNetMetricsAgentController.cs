@@ -11,7 +11,6 @@ namespace MetricsAgent.Controller
     [Route("api/metrics/dotnet")]
     public class DotNetMetricsAgentController : ControllerBase
     {
-        
         /// <summary>
         /// Колличество ошибок за период
         /// </summary>
@@ -22,6 +21,18 @@ namespace MetricsAgent.Controller
         public ActionResult<int> GetErrorsCount ([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
         {
             return 1;
+        }
+        
+        /// <summary>
+        /// Данные метрики за период
+        /// </summary>
+        /// <param name="fromTime"></param>
+        /// <param name="toTime"></param>
+        /// <returns></returns>
+        [HttpGet("from/{fromTime}/to/{toTime}")]
+        public IEnumerable<DotNetMetricsModel> GetList ([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
+        {
+            return new List<DotNetMetricsModel>();
         }
     }
 }

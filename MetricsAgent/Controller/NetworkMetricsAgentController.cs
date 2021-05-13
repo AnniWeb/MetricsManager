@@ -11,7 +11,6 @@ namespace MetricsAgent.Controller
     [Route("api/metrics/network")]
     public class NetworkMetricsAgentController : ControllerBase
     {
-        
         /// <summary>
         /// Данные метрики за период
         /// </summary>

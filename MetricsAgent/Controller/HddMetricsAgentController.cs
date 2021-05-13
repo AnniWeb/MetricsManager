@@ -11,7 +11,6 @@ namespace MetricsAgent.Controller
     [Route("api/metrics/hdd")]
     public class HddMetricsAgentController : ControllerBase
     {
-        
         /// <summary>
         /// Размер оставшегося свободного дискового пространства в мегабайтах
         /// </summary>
@@ -20,6 +19,18 @@ namespace MetricsAgent.Controller
         public ActionResult<double> GetLeftSpace ()
         {
             return 0;
+        }
+        
+        /// <summary>
+        /// Данные метрики за период
+        /// </summary>
+        /// <param name="fromTime"></param>
+        /// <param name="toTime"></param>
+        /// <returns></returns>
+        [HttpGet("from/{fromTime}/to/{toTime}")]
+        public IEnumerable<HddSpaceMetrics> GetList ([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
+        {
+            return new List<HddSpaceMetrics>();
         }
     }
 }

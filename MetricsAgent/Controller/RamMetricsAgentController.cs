@@ -11,7 +11,6 @@ namespace MetricsAgent.Controller
     [Route("api/metrics/ram")]
     public class RamMetricsAgentController : ControllerBase
     {
-        
         /// <summary>
         /// Размер свободной оперативной памяти в мегабайтах
         /// </summary>
@@ -20,6 +19,18 @@ namespace MetricsAgent.Controller
         public ActionResult<double> GetAvailable ()
         {
             return 0;
+        }
+        
+        /// <summary>
+        /// Данные метрики за период
+        /// </summary>
+        /// <param name="fromTime"></param>
+        /// <param name="toTime"></param>
+        /// <returns></returns>
+        [HttpGet("from/{fromTime}/to/{toTime}")]
+        public IEnumerable<RamMetrics> GetList ([FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime)
+        {
+            return new List<RamMetrics>();
         }
     }
 }
