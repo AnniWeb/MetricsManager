@@ -65,6 +65,5 @@ namespace MetricsAgent.Cron
                 .WithDescription(schedule.CronExpression)
                 .Build();
         }
-
     }
 }

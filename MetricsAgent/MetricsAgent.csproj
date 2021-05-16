@@ -19,7 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Monitor" />
+      <Folder Include="Cron\Job" />
+      <Folder Include="DAL\Migration" />
       <Folder Include="Rest" />
     </ItemGroup>
 

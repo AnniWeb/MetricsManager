@@ -30,6 +30,5 @@ namespace MetricsAgent.Cron.Job
             
             return Task.CompletedTask;
         }
-        
     }
 }
