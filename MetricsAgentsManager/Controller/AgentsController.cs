@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MetricsAgentsManager.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace MetricsAgentsManager.Controller
 {
@@ -9,6 +10,15 @@ namespace MetricsAgentsManager.Controller
     [ApiController]
     public class AgentsController : ControllerBase
     {
+        private readonly ILogger<AgentsController> _logger;
+
+        public AgentsController(ILogger<AgentsController> logger)
+        {
+            _logger = logger;
+            _logger.LogDebug(1, $"NLog встроен в {GetType()}");
+        }
+        
+        
         /// <summary>
         /// Регистрация агента
         /// </summary>
@@ -17,6 +27,7 @@ namespace MetricsAgentsManager.Controller
         [HttpPost("register")]
         public IActionResult RegisterAgent([FromBody] AgentInfo agentInfo)
         {
+            _logger.LogInformation("Регистрация агента");
             return Ok();
         }
 
@@ -28,6 +39,7 @@ namespace MetricsAgentsManager.Controller
         [HttpPut("enable/{agentId}")]
         public IActionResult EnableAgentById([FromRoute] int agentId)
         {
+            _logger.LogInformation($"Включение агента {agentId}");
             return Ok();
         }
 
@@ -39,6 +51,7 @@ namespace MetricsAgentsManager.Controller
         [HttpPut("disable/{agentId}")]
         public IActionResult DisableAgentById([FromRoute] int agentId)
         {
+            _logger.LogInformation($"Отключение агента {agentId}");
             return Ok();
         }
 
@@ -49,6 +62,7 @@ namespace MetricsAgentsManager.Controller
         [HttpGet]
         public ActionResult<IEnumerable<AgentInfo>> GetList()
         {
+            _logger.LogInformation("Запрос списка агентов");
             return new List<AgentInfo>();
         }
     }

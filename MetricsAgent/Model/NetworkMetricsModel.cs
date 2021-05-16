@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MetricsAgent.Model
 {
-    public class NetworkMetricsModel : IMetricModel<string>
+    public class NetworkMetricsModel : IMetricModel<int>
     {
         public int Id { get; set; }
         
         [Required]
-        public string Value { get; set; }
+        public int Value { get; set; }
         
-        public DateTime DateTime { get; set; }
+        public DateTimeOffset Time { get; set; }
     }
 }

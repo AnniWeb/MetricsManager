@@ -6,3 +6,4 @@ riderModule.iml
 /.idea
 /.vs
 weather_date.json
+*.db

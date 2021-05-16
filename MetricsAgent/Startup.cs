@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
+using MetricsAgent.Controller;
 using MetricsAgent.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,8 +44,14 @@ namespace MetricsAgent
                     Version = "v1"
                 });
             });
+
+            ConfigureSqlLiteConnection(services);
             
-            services.AddSingleton<CPUMetricRepository>();
+            services.AddSingleton<ICPUMetricsRepository,CPUMetricsRepository>();
+            services.AddSingleton<IDotNetMetricsRepository,DotNetMetricsRepository>();
+            services.AddSingleton<IHddMetricsRepository,HddMetricsRepository>();
+            services.AddSingleton<INetworkMetricsRepository,NetworkMetricsRepository>();
+            services.AddSingleton<IRamMetricsRepository,RamMetricsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +71,13 @@ namespace MetricsAgent
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        }
+        
+        private void ConfigureSqlLiteConnection(IServiceCollection services)
+        {
+            const string connectionString = "Data Source=metrics.db;Version=3;Pooling=true;Max Pool Size=100;";
+            var connection = new SQLiteConnection(connectionString);
+            connection.Open();  
         }
     }
 }
