@@ -42,12 +42,9 @@ namespace MetricsAgent.Rest.Controller
                 Metrics = new List<DotNetMetricResponse>()
             };
             
-            if (metrics.Count > 0)
+            foreach (var metric in metrics)
             {
-                foreach (var metric in metrics)
-                {
-                    response.Metrics.Add(_mapper.Map<DotNetMetricResponse>(metric));
-                }
+                response.Metrics.Add(_mapper.Map<DotNetMetricResponse>(metric));
             }
             
             return Ok(response);

@@ -43,12 +43,9 @@ namespace MetricsAgent.Rest.Controller
                 Metrics = new List<NetworkMetricResponse>()
             };
 
-            if (metrics.Count > 0)
+            foreach (var metric in metrics)
             {
-                foreach (var metric in metrics)
-                {
-                    response.Metrics.Add(_mapper.Map<NetworkMetricResponse>(metric));
-                }
+                response.Metrics.Add(_mapper.Map<NetworkMetricResponse>(metric));
             }
             
             return Ok(response);

@@ -44,12 +44,9 @@ namespace MetricsAgent.Rest.Controller
                 Metrics = new List<CPUMetricResponse>()
             };
             
-            if (metrics.Count > 0)
+            foreach (var metric in metrics)
             {
-                foreach (var metric in metrics)
-                {
-                    response.Metrics.Add(_mapper.Map<CPUMetricResponse>(metric));
-                }
+                response.Metrics.Add(_mapper.Map<CPUMetricResponse>(metric));
             }
             
             return Ok(response);
