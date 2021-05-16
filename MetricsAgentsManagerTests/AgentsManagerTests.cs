@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MetricsAgentsManager.Model;
+using MetricsAgentsManager.Controller;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using MetricsAgentsManager.Model;
-using MetricsAgentsManager.Controller;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Xunit;
+
 
 namespace MetricsAgentsManagerTests
 {
@@ -14,15 +17,10 @@ namespace MetricsAgentsManagerTests
 
         public AgentsManagerTests()
         {
-            _controller = new AgentsController();
+            var logger = new Mock<ILogger<AgentsController>>();
+            
+            _controller = new AgentsController(logger.Object);
             _root = new Uri("https://localhost:44347");
-        }
-
-        [Fact]
-        public void TestTEst()
-        {
-            var result = 1;
-            _ = Assert.IsAssignableFrom<int>(result);
         }
         
         [Fact]

@@ -4,7 +4,10 @@ using System.Collections.ObjectModel;
 using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
-using MetricsAgent.Controller;
+using AutoMapper;
+using MetricsAgent.DAL.DataConnector;
+using MetricsAgent.DAL.Interfaces;
+using MetricsAgent.DAL.Mapper;
 using MetricsAgent.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,11 +29,13 @@ namespace MetricsAgent
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
+            // Контроллеры
             services.AddControllers();
+            
+            // Докумеентация
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -45,8 +50,15 @@ namespace MetricsAgent
                 });
             });
 
-            ConfigureSqlLiteConnection(services);
+            // БД
+            services.AddSingleton<IDataConnector,SQLLite>();
             
+            // Мапперы
+            var mapperConfiguration = new MapperConfiguration(mp => mp.AddProfile(new MapperProfile()));
+            var mapper = mapperConfiguration.CreateMapper();
+            services.AddSingleton(mapper);
+            
+            // Репозитории
             services.AddSingleton<ICPUMetricsRepository,CPUMetricsRepository>();
             services.AddSingleton<IDotNetMetricsRepository,DotNetMetricsRepository>();
             services.AddSingleton<IHddMetricsRepository,HddMetricsRepository>();
@@ -54,7 +66,6 @@ namespace MetricsAgent
             services.AddSingleton<IRamMetricsRepository,RamMetricsRepository>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -71,13 +82,6 @@ namespace MetricsAgent
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-        }
-        
-        private void ConfigureSqlLiteConnection(IServiceCollection services)
-        {
-            const string connectionString = "Data Source=metrics.db;Version=3;Pooling=true;Max Pool Size=100;";
-            var connection = new SQLiteConnection(connectionString);
-            connection.Open();  
         }
     }
 }
