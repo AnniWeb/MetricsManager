@@ -36,7 +36,7 @@ namespace MetricsAgent.Rest.Controller
         [HttpGet("from/{fromTime}/to/{toTime}")]
         public IActionResult GetByPeriod ([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
         {
-            _logger.LogInformation("Запрос метрик за период");
+            _logger.LogInformation($"Запрос метрик за период c {fromTime:f} по {toTime:f}");
             var metrics = _repository.GetByPeriod(fromTime, toTime);
             
             var response = new ListCPUMetricsResponse()
@@ -51,7 +51,6 @@ namespace MetricsAgent.Rest.Controller
                     response.Metrics.Add(_mapper.Map<CPUMetricResponse>(metric));
                 }
             }
-            
             
             return Ok(response);
         }
