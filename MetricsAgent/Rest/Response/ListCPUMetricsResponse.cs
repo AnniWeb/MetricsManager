@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using MetricsAgent.Rest.Interfaces;
 
 namespace MetricsAgent.Rest.Response
 {
-    public class ListCPUMetricsResponse
+    public class ListCPUMetricsResponse : IListMetricsResponse<CPUMetricResponse>
     {
-        public List<CPUMetricResponse> Metrics { get; set; }
+        public IList<CPUMetricResponse> Metrics { get; set; }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using MetricsAgent.Rest.Interfaces;
 
 namespace MetricsAgent.Rest.Response
 {
-    public class ListNetworkMetricsResponse
+    public class ListNetworkMetricsResponse : IListMetricsResponse<NetworkMetricResponse>
     {
-        public List<NetworkMetricResponse> Metrics { get; set; }
+        public IList<NetworkMetricResponse> Metrics { get; set; }
     }
 }

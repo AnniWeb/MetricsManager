@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using MetricsAgent.Rest.Interfaces;
 
 namespace MetricsAgent.Rest.Response
 {
-    public class ListHddSpaceMetricsResponse
+    public class ListHddSpaceMetricsResponse : IListMetricsResponse<HddSpaceMetricResponse>
     {
-        public List<HddSpaceMetricResponse> Metrics { get; set; }
+        public IList<HddSpaceMetricResponse> Metrics { get; set; }
     }
 }

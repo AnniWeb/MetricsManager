@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using MetricsAgent.Rest.Interfaces;
 
 namespace MetricsAgent.Rest.Response
 {
-    public class ListRamMetricsResponse
+    public class ListRamMetricsResponse : IListMetricsResponse<RamMetricResponse>
     {
-        public List<RamMetricResponse> Metrics { get; set; }
+        public IList<RamMetricResponse> Metrics { get; set; }
     }
 }

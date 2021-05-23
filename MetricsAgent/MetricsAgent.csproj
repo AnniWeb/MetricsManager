@@ -20,8 +20,6 @@
 
     <ItemGroup>
       <Folder Include="Cron\Job" />
-      <Folder Include="DAL\Migration" />
-      <Folder Include="Rest" />
     </ItemGroup>
 
 </Project>
