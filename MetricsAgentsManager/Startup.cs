@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentMigrator.Runner;
@@ -51,10 +53,21 @@ namespace MetricsAgentsManager
                     Description = "Позволяет управлять агентами",
                     Contact = new OpenApiContact
                     {
-                        Name = "Заярная Анастасия"
+                        Name = "Заярная Анастасия",
+                        Email = string.Empty,
                     },
-                    Version = "v1"
+                    Version = "v1",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    License = new OpenApiLicense
+                    {
+                        Name = string.Empty,
+                        Url = new Uri("https://example.com/license"),
+                    }
                 });
+                
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
             
             // БД
@@ -110,7 +123,7 @@ namespace MetricsAgentsManager
                 app.UseSwagger(c => c.SerializeAsV2 = true);
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MetricsAgentsManager v1");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API сервиса менеджера агентов сборок метрик");
                     c.RoutePrefix = String.Empty;
                 });
             }

@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentMigrator.Runner;
@@ -46,14 +48,25 @@ namespace MetricsAgent
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Менеджер метрик", 
+                    Title = "Агент для сбора метрик", 
                     Description = "Позволяет отслеживать и анализировать параметры системы",
                     Contact = new OpenApiContact
                     {
-                        Name = "Заярная Анастасия"
+                        Name = "Заярная Анастасия",
+                        Email = string.Empty,
                     },
-                    Version = "v1"
+                    Version = "v1",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    License = new OpenApiLicense
+                    {
+                        Name = string.Empty,
+                        Url = new Uri("https://example.com/license"),
+                    }
                 });
+                
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
             // БД
@@ -101,7 +114,11 @@ namespace MetricsAgent
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger(c => c.SerializeAsV2 = true);
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MetricsAgent v1"));
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API сервиса агента сбора метрик");
+                    c.RoutePrefix = String.Empty;
+                });
             }
 
             app.UseHttpsRedirection();
