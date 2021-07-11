@@ -33,6 +33,8 @@ namespace MetricsAgentsManager.Rest.Controller
         /// </summary>
         /// <param name="agentInfo">Данные агента</param>
         /// <returns></returns>
+        /// <response code="201">Агент зарегистрирован</response>
+        /// <response code="400">Переданы не корректные параетры</response> 
         [HttpPost("register")]
         public IActionResult RegisterAgent([FromBody] AgentInfoRequest agentInfo)
         {
@@ -48,6 +50,7 @@ namespace MetricsAgentsManager.Rest.Controller
         /// </summary>
         /// <param name="agentId">Ид агента</param>
         /// <returns></returns>
+        /// <response code="400">Переданы не корректные параетры</response> 
         [HttpPut("enable/{agentId}")]
         public IActionResult EnableAgentById([FromRoute] int agentId)
         {
@@ -74,6 +77,7 @@ namespace MetricsAgentsManager.Rest.Controller
         /// </summary>
         /// <param name="agentId">Ид агента</param>
         /// <returns></returns>
+        /// <response code="400">Переданы не корректные параетры</response> 
         [HttpPut("disable/{agentId}")]
         public IActionResult DisableAgentById([FromRoute] int agentId)
         {
@@ -99,7 +103,9 @@ namespace MetricsAgentsManager.Rest.Controller
         /// Список зарегистрированных агентов
         /// </summary>
         /// <returns>Список агентов</returns>
+        /// <response code="400">Переданы не корректные параетры</response> 
         [HttpGet]
+        [ProducesResponseType(typeof(AgentInfoResponse), 200)]
         public IActionResult GetList()
         {
             _logger.LogInformation("Запрос списка агентов");
@@ -120,12 +126,20 @@ namespace MetricsAgentsManager.Rest.Controller
         }
         
         /// <summary>
-        /// Данные метрики за период
+        /// Данные метрик со всех агентов за период
         /// </summary>
-        /// <param name="fromTime"></param>
-        /// <param name="toTime"></param>
-        /// <returns></returns>
-        [HttpGet("from/{fromTime}/to/{toTime}")]
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        ///     GET agents/metrics/from/2021-01-01/to/2021-12-31
+        ///
+        /// </remarks>
+        /// <param name="fromTime">начало периода выборки</param>
+        /// <param name="toTime">конец периода выборки</param>
+        /// <returns>Список метрик, которые были сохранены в заданном диапазоне времени</returns>
+        /// <response code="400">Переданы не корректные параетры</response> 
+        [HttpGet("metrics/from/{fromTime}/to/{toTime}")]
+        [ProducesResponseType(typeof(ListAllMetricsResponse), 200)]
         public IActionResult GetByPeriod ([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
         {
             _logger.LogInformation($"Запрос метрик за период c {fromTime:f} по {toTime:f}");
@@ -148,6 +162,49 @@ namespace MetricsAgentsManager.Rest.Controller
             response.HddSpaceMetrics = _repository.GetHddSpaceMetricsByPeriod(fromTime, toTime)
                 .Select(metric => _mapper.Map<HddSpaceMetricResponse>(metric));
             response.RamMetrics = _repository.GetRamMetricsByPeriod(fromTime, toTime)
+                .Select(metric => _mapper.Map<RamMetricResponse>(metric));
+            
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Данные метрик с агента за период
+        /// </summary>
+        /// <remarks>
+        /// Пример запроса:
+        /// 
+        ///     GET agents/1/metrics/from/2021-01-01/to/2021-12-31
+        /// 
+        /// </remarks>
+        /// <param name="agentId"></param>
+        /// <param name="fromTime">начало периода выборки</param>
+        /// <param name="toTime">конец периода выборки</param>
+        /// <returns>Список метрик, которые были сохранены в заданном диапазоне времени</returns>
+        /// <response code="400">Переданы не корректные параетры</response> 
+        [HttpGet("{agentId}/metrics/from/{fromTime}/to/{toTime}")]
+        [ProducesResponseType(typeof(ListAllMetricsResponse), 200)]
+        public IActionResult GetByPeriod ([FromRoute] long agentId, [FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
+        {
+            _logger.LogInformation($"Запрос метрик за период c {fromTime:f} по {toTime:f}");
+
+            var response = new ListAllMetricsResponse()
+            {
+                CpuMetrics = new List<CPUMetricResponse>(),
+                NetworkMetrics = new List<NetworkMetricResponse>(),
+                DotNetMetrics = new List<DotNetMetricResponse>(),
+                HddSpaceMetrics = new List<HddSpaceMetricResponse>(),
+                RamMetrics = new List<RamMetricResponse>()
+            };
+
+            response.CpuMetrics = _repository.GetCpuMetricsByPeriod(fromTime, toTime, agentId)
+                .Select(metric => _mapper.Map<CPUMetricResponse>(metric));
+            response.NetworkMetrics = _repository.GetNetworkMetricsByPeriod(fromTime, toTime, agentId)
+                .Select(metric => _mapper.Map<NetworkMetricResponse>(metric));
+            response.DotNetMetrics = _repository.GetDotNetMetricsByPeriod(fromTime, toTime, agentId)
+                .Select(metric => _mapper.Map<DotNetMetricResponse>(metric));
+            response.HddSpaceMetrics = _repository.GetHddSpaceMetricsByPeriod(fromTime, toTime, agentId)
+                .Select(metric => _mapper.Map<HddSpaceMetricResponse>(metric));
+            response.RamMetrics = _repository.GetRamMetricsByPeriod(fromTime, toTime, agentId)
                 .Select(metric => _mapper.Map<RamMetricResponse>(metric));
             
             return Ok(response);

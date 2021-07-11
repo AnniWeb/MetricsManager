@@ -161,27 +161,27 @@ namespace MetricsAgentsManager.Repository
             return returnList;
         }
 
-        public IList<CpuMetric> GetCpuMetricsByPeriod(DateTimeOffset fromTime, DateTimeOffset toTime, int agentId = 0)
+        public IList<CpuMetric> GetCpuMetricsByPeriod(DateTimeOffset fromTime, DateTimeOffset toTime, long agentId = 0)
         {
             return _cpuMetricsRepository.GetByPeriod(fromTime, toTime, agentId);
         }
 
-        public IList<NetworkMetric> GetNetworkMetricsByPeriod(DateTimeOffset fromTime, DateTimeOffset toTime, int agentId = 0)
+        public IList<NetworkMetric> GetNetworkMetricsByPeriod(DateTimeOffset fromTime, DateTimeOffset toTime, long agentId = 0)
         {
             return _networkMetricsRepository.GetByPeriod(fromTime, toTime, agentId);
         }
 
-        public IList<DotNetMetric> GetDotNetMetricsByPeriod(DateTimeOffset fromTime, DateTimeOffset toTime, int agentId = 0)
+        public IList<DotNetMetric> GetDotNetMetricsByPeriod(DateTimeOffset fromTime, DateTimeOffset toTime, long agentId = 0)
         {
             return _dotNetMetricsRepository.GetByPeriod(fromTime, toTime, agentId);
         }
 
-        public IList<HddSpaceMetric> GetHddSpaceMetricsByPeriod(DateTimeOffset fromTime, DateTimeOffset toTime, int agentId = 0)
+        public IList<HddSpaceMetric> GetHddSpaceMetricsByPeriod(DateTimeOffset fromTime, DateTimeOffset toTime, long agentId = 0)
         {
             return _hddMetricsRepository.GetByPeriod(fromTime, toTime, agentId);
         }
 
-        public IList<RamMetric> GetRamMetricsByPeriod(DateTimeOffset fromTime, DateTimeOffset toTime, int agentId = 0)
+        public IList<RamMetric> GetRamMetricsByPeriod(DateTimeOffset fromTime, DateTimeOffset toTime, long agentId = 0)
         {
             return _ramMetricsRepository.GetByPeriod(fromTime, toTime, agentId);
         }

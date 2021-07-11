@@ -30,10 +30,18 @@ namespace MetricsAgent.Rest.Controller
         /// <summary>
         /// Данные метрики за период
         /// </summary>
-        /// <param name="fromTime"></param>
-        /// <param name="toTime"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        ///     GET metrics/cpu/from/2021-01-01/to/2021-12-31
+        ///
+        /// </remarks>
+        /// <param name="fromTime">начало периода выборки</param>
+        /// <param name="toTime">конец периода выборки</param>
+        /// <returns>Список метрик, которые были сохранены в заданном диапазоне времени</returns>
+        /// <response code="400">Переданы не корректные параетры</response> 
         [HttpGet("from/{fromTime}/to/{toTime}")]
+        [ProducesResponseType(typeof(ListCPUMetricsResponse), 200)]
         public IActionResult GetByPeriod ([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
         {
             _logger.LogInformation($"Запрос метрик за период c {fromTime:f} по {toTime:f}");
