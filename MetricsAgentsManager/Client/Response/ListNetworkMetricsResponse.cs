@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using MetricsAgent.Rest.Interfaces;
+using MetricsAgentsManager.Client.Interfaces;
 
-namespace MetricsAgent.Rest.Response
+namespace MetricsAgentsManager.Client.Response
 {
     public class ListNetworkMetricsResponse : IListMetricsResponse<NetworkMetricResponse>
     {
